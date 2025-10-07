@@ -41,7 +41,7 @@ if ($testProjects.Count -eq 0) {
     
     if ($solutionFiles.Count -eq 0) {
         Write-Host "No solution files found. Running dotnet test on all projects..." -ForegroundColor Yellow
-        $result = dotnet test --verbosity quiet --no-build
+        dotnet test --verbosity quiet --no-build
         if ($LASTEXITCODE -ne 0) {
             Write-Host "Error: Tests failed!" -ForegroundColor Red
             exit 1
@@ -50,10 +50,9 @@ if ($testProjects.Count -eq 0) {
         # Run tests on solution files
         foreach ($solution in $solutionFiles) {
             Write-Host "Running tests for solution: $solution" -ForegroundColor Blue
-            $result = dotnet test $solution --verbosity quiet --no-build
+            dotnet test $solution --verbosity quiet --no-build
             if ($LASTEXITCODE -ne 0) {
                 Write-Host "Error: Tests failed for $solution" -ForegroundColor Red
-                exit 1
                 exit 1
             }
         }
@@ -62,7 +61,7 @@ if ($testProjects.Count -eq 0) {
     # Run tests on individual test projects
     foreach ($project in $testProjects) {
         Write-Host "Running tests for project: $project" -ForegroundColor Blue
-        $result = dotnet test $project --verbosity quiet --no-build
+        dotnet test $project --verbosity quiet --no-build
         if ($LASTEXITCODE -ne 0) {
             Write-Host "Error: Tests failed for $project" -ForegroundColor Red
             exit 1

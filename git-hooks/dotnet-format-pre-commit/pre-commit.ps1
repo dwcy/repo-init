@@ -4,7 +4,8 @@
 # Check if dotnet is available
 try {
     $null = dotnet --version
-} catch {
+}
+catch {
     Write-Host "Error: dotnet command not found. Please install .NET SDK." -ForegroundColor Red
     exit 1
 }
