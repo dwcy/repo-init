@@ -1,10 +1,7 @@
 # Pre-commit hook that runs dotnet format on staged .NET files
 # PowerShell version for Windows
 
-# Colors for output
-$Red = "Red"
-$Green = "Green"
-$Yellow = "Yellow"
+# Colors for output (using direct color names in Write-Host commands)
 
 # Check if dotnet is available
 try {

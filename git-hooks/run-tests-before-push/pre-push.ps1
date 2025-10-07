@@ -7,14 +7,14 @@ $Green = "Green"
 $Yellow = "Yellow"
 $Blue = "Blue"
 
-Write-Host "Running dotnet test before push..." -ForegroundColor Blue
+Write-Host "Running dotnet test before push..." -ForegroundColor $Blue
 
 # Check if dotnet is available
 try {
     $dotnetVersion = dotnet --version
-    Write-Host "Using .NET version: $dotnetVersion" -ForegroundColor Green
+    Write-Host "Using .NET version: $dotnetVersion" -ForegroundColor $Green
 } catch {
-    Write-Host "Error: dotnet command not found. Please install .NET SDK." -ForegroundColor Red
+    Write-Host "Error: dotnet command not found. Please install .NET SDK." -ForegroundColor $Red
     exit 1
 }
 
@@ -35,7 +35,7 @@ foreach ($project in $allProjects) {
 }
 
 if ($testProjects.Count -eq 0) {
-    Write-Host "Warning: No test projects found. Looking for solution files..." -ForegroundColor Yellow
+    Write-Host "Warning: No test projects found. Looking for solution files..." -ForegroundColor $Yellow
     
     # Find solution files and run tests on them
     $solutionFiles = Get-ChildItem -Path . -Filter "*.sln" -Recurse | Where-Object { 
@@ -46,20 +46,19 @@ if ($testProjects.Count -eq 0) {
     } | Select-Object -ExpandProperty FullName
     
     if ($solutionFiles.Count -eq 0) {
-        Write-Host "No solution files found. Running dotnet test on all projects..." -ForegroundColor Yellow
-        $result = dotnet test --verbosity quiet --no-build
+        Write-Host "No solution files found. Running dotnet test on all projects..." -ForegroundColor $Yellow
+        dotnet test --verbosity quiet --no-build
         if ($LASTEXITCODE -ne 0) {
-            Write-Host "Error: Tests failed!" -ForegroundColor Red
+            Write-Host "Error: Tests failed!" -ForegroundColor $Red
             exit 1
         }
     } else {
         # Run tests on solution files
         foreach ($solution in $solutionFiles) {
-            Write-Host "Running tests for solution: $solution" -ForegroundColor Blue
-            $result = dotnet test $solution --verbosity quiet --no-build
+            Write-Host "Running tests for solution: $solution" -ForegroundColor $Blue
+            dotnet test $solution --verbosity quiet --no-build
             if ($LASTEXITCODE -ne 0) {
-                Write-Host "Error: Tests failed for $solution" -ForegroundColor Red
-                exit 1
+                Write-Host "Error: Tests failed for $solution" -ForegroundColor $Red
                 exit 1
             }
         }
@@ -67,14 +66,14 @@ if ($testProjects.Count -eq 0) {
 } else {
     # Run tests on individual test projects
     foreach ($project in $testProjects) {
-        Write-Host "Running tests for project: $project" -ForegroundColor Blue
-        $result = dotnet test $project --verbosity quiet --no-build
+        Write-Host "Running tests for project: $project" -ForegroundColor $Blue
+        dotnet test $project --verbosity quiet --no-build
         if ($LASTEXITCODE -ne 0) {
-            Write-Host "Error: Tests failed for $project" -ForegroundColor Red
+            Write-Host "Error: Tests failed for $project" -ForegroundColor $Red
             exit 1
         }
     }
 }
 
-Write-Host "All tests passed! Proceeding with push..." -ForegroundColor Green
+Write-Host "All tests passed! Proceeding with push..." -ForegroundColor $Green
 exit 0
