@@ -46,7 +46,22 @@ if ($testProjects.Count -eq 0) {
     } | Select-Object -ExpandProperty FullName
     
     if ($solutionFiles.Count -eq 0) {
-        Write-Host "No solution files found. Running dotnet test on all projects..." -ForegroundColor $Yellow
+        Write-Host "No solution files found. Checking if this is a .NET project..." -ForegroundColor $Yellow
+        
+        # Check if there are any .csproj files at all
+        $anyProjects = Get-ChildItem -Path . -Filter "*.csproj" -Recurse | Where-Object { 
+            $_.FullName -notmatch '\.git' -and 
+            $_.FullName -notmatch 'node_modules' -and 
+            $_.FullName -notmatch '\\bin\\' -and 
+            $_.FullName -notmatch '\\obj\\'
+        }
+        
+        if ($anyProjects.Count -eq 0) {
+            Write-Host "No .NET projects found. Skipping tests for non-.NET repository." -ForegroundColor $Green
+            exit 0
+        }
+        
+        Write-Host "Running dotnet test on all projects..." -ForegroundColor $Yellow
         dotnet test --verbosity quiet --no-build
         if ($LASTEXITCODE -ne 0) {
             Write-Host "Error: Tests failed!" -ForegroundColor $Red
