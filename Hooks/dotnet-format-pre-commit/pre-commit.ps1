@@ -1,6 +1,7 @@
 # Pre-commit hook that runs dotnet format on staged .NET files
 # PowerShell version for Windows
 
+
 # Check if dotnet is available
 try {
     $null = dotnet --version
